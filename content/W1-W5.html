@@ -154,8 +154,106 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content"> <a href='W1-W5.html'>Next</a> >> W1-W5<br /><h1>每週進度</h1>
-<br /> <a href='W1-W5.html'>Next</a> >> W1-W5</div>
+    <div id="tipue_search_content">每週進度 << <a href='每週進度.html'>Previous</a> <a href='W6.html'>Next</a> >> W6<br /><h1>W1-W5</h1>
+<h4>隨身系統之建立</h4>
+<p>(1)下載安裝Python3.8.2至電腦，從電腦C槽中複製Python38資料夾至隨身系統之data目錄下，<span>解除電腦系統中之</span>Python。</p>
+<p>(2)下載<span>Scite.exe編輯器並將資料夾移至隨身系統下之data目錄下，將SciTEGlobal.properties檔案中的code.page = 0修改為code.page = 65001，如此一來就可以更方便的打開內涵中文字的程式了，最後利用SciTE建立stop.bat與start.bat如下:</span></p>
+<p>start.bat</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">@echo off
+set Disk=y
+path=%PATH%;
+
+taskkill /IM python.exe /F
+taskkill /IM pythonw.exe /F
+
+taskkill /IM scite.exe /F
+
+REM 終止虛擬硬碟與目錄的對應
+subst %Disk%: /D
+REM 關閉 cmd 指令視窗
+taskkill /IM cmd.exe /F
+
+EXIT</pre>
+<p>stop.bat</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">@echo off
+set Disk=y
+subst %Disk%: "data"
+
+%Disk%:
+
+set HomePath=%Disk%:\home
+set HomeDrive=%Disk%:\home
+set Home=%Disk%:\home
+set USERPROFILE=%Disk%:\home
+
+REM 將系統 Python 程式的 io 設為 utf-8
+set PYTHONIOENCODING="utf-8"
+
+set PYTHONPATH=%Disk%:\Python38\DLLs;%Disk%:\Python38\Lib;%Disk%:\Python38\Lib\site-packages;
+set PYTHONHOME=%Disk%:\Python38
+
+set path_python=%Disk%:\Python38;%Disk%:\Python38\Scripts;
+
+path=%Disk%:;%path_python%;
+
+start /MIN cmd.exe
+start /MIN cmd.exe
+start /MIN cmd.exe
+start /MIN cmd.exe
+
+start /MIN %Disk%:\wScite\SciTE.exe
+start /MIN %Disk%:\wScite\SciTE.exe
+
+Exit</pre>
+<p><span></span>(3)<span>利用get-pip.py在先前完成之隨身系統中安裝pip，利用pip指令python -m pip install flask lxml bs4 flask-cors Markdown pelican leo 安裝 flask lxml beautifulsoup4 flask-cors Markdown pelican 及 leo</span></p>
+<p><span>(4)下載msys2先安裝在Windows系統，從電腦C槽中複製msys64資料夾至隨身系統之data目錄下，並解除電腦系統中之msys2。</span></p>
+<p><span>(5)設置y：\ msys64 \ etc \ pacman.conf與wgetrc等兩個檔案：<br/><span><span>pacman.conf檔案部分：</span></span></span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># next two lines uncommented for wcm2020
+XferCommand = /usr/bin/curl -L -C - -f -o %o %u
+XferCommand = /usr/bin/wget --passive-ftp -c -O %o %u
+#CleanMethod = KeepInstalled
+Architecture = auto</pre>
+<p><span>wgetrc檔案部分：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># set for wcm2020
+https_proxy = http://[2001:288:6004:17::53]:3128/
+http_proxy = http://[2001:288:6004:17::53]:3128/
+ftp_proxy = http://[2001:288:6004:17::53]:3128/</pre>
+<p><span>修改完成後，重新啟動mingw64.exe，使用指令透過IPv6的proxy server進行</span><span>程序包更新：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -Syu</pre>
+<p><span>再安裝base-devel與gcc</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S base-devel
+$ pacman -S gcc</pre>
+<p>安裝完後須修改start.bat之內容如下:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">REM 設定 msys2 64 位元的執行路徑
+set path_msys2=%Disk%:\msys64\usr\bin;
+
+path=%Disk%:;%path_python%;%path_git%;%path_msys2%;</pre>
+<p><span>安裝make</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S make</pre>
+<p><span>處理完MSYS環境中的gcc之後，為了建立Windows 64位元環境下的gcc編譯環境，接下來要在先前尚未處理的MSYS環境下的版本中，安裝mingw-w64-x86_64-gcc與mingw-w64- x86_64-toolchain，下載初步尚未安裝任何gcc版本的可移植MSYS2系統，然後安裝gcc與toolchain：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S mingw-w64-x86_64-gcc
+
+$ pacman -S mingw-w64-x86_64-toolchain</pre>
+<p><span>之後就可以修改start.bat啟動路徑為：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">REM 設定 msys2 64 位元的執行路徑
+set path_msys2=%Disk%:\msys64\mingw64\bin;
+
+path=%Disk%:;%path_python%;%path_git%;%path_msys2%;</pre>
+<p><span>後利用此一mingw-w64-x86_64-gcc編譯放置tmp的Scintilla與Scite，只要分別進入win32目錄，然後執行make指令：</span></p>
+<pre class="brush:xml;auto-links:false;toolbar:false" contenteditable="false">$ mingw32-make</pre>
+<p><span>完成後，測試編譯以下簡單的C程序：</span></p>
+<pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">// hello.c
+#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, world!\n");
+    return 0;
+}</pre>
+<p><span>將此檔案存在tmp \ c_ex目錄下，命名為hello.c</span><br/><span><span>然後利用：</span></span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">gcc -o hello.exe hello.c</pre>
+<p>完成後將輸出一個hello.exe</p>
+<p>(6)安裝PortableGit於隨身系統。</p>
+<br />每週進度 << <a href='每週進度.html'>Previous</a> <a href='W6.html'>Next</a> >> W6</div>
         
     <!-- footer -->
       <div class="container">

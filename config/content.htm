@@ -1,17 +1,319 @@
-<h1>About</h1>
-<p>此內容管理系統以 <a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> 作為 submodule 運作, 可以選定對應的版本運作, cmsimde 可以持續改版, 不會影響之前設為 submodule, 使用舊版 cmsimde 模組的內容管理相關運作.</p>
-<h4>利用 cmsimde 建立靜態網誌方法:</h4>
-<p>1. 在 github 建立倉儲, git clone 到近端</p>
-<p>2. 參考 <a href="https://github.com/mdecourse/newcms">https://github.com/mdecourse/newcms</a>, 加入除了 cmsimde 目錄外的所有內容</p>
-<p>以 git submodule add <a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> cmsimde</p>
-<p>建立 cmsimde 目錄, 並從 github 取下子模組內容.</p>
-<p>3.在近端維護時, 更換目錄到倉儲中的 cmsimde, 以 python wsgi.py 啟動近端網際伺服器.</p>
-<p>動態內容編輯完成後, 以 generate_pages 轉為靜態內容, 以 git add commit 及 push 將內容推到遠端.</p>
-<p>4. 之後若要以 git clone 取下包含 submodule 的所有內容, 執行:</p>
-<p>git clone --recurse-submodules <a href="https://github.com/mdecourse/newcms.git">https://github.com/mdecourse/newcms.git</a></p>
-<h1>Develop</h1>
-<p><a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> 的開發, 可以在一個目錄中放入 cmsimde, 然後將 up_dir 中的內容放到與 cmsimde 目錄同位階的地方, 使用 command 進入 cmsimde 目錄, 執行 python wsgi.py, 就可以啟動, 以瀏覽器 https://localhost:9443 就可以連接, 以 admin 作為管理者密碼, 就可以登入維護內容.</p>
-<p>cmsimde 的開發採用 Leo Editor, 開啟 cmsimde 目錄中的 cmsimde.leo 就可以進行程式修改, 結束後, 若要保留網際內容, 只要將 cmsimde 外部的內容倒回 up_dir 目錄中即可後續對 cmsimde 遠端倉儲進行改版.</p>
-<p>init.py 位於  up_dir 目錄, 可以設定 site_title 與 uwsgi 等變數.</p>
-<p>ssh 測試</p>
+<h1>每週進度</h1>
+<h2>W1-W5</h2>
+<h4>隨身系統之建立</h4>
+<p>(1)下載安裝Python3.8.2至電腦，從電腦C槽中複製Python38資料夾至隨身系統之data目錄下，<span>解除電腦系統中之</span>Python。</p>
+<p>(2)下載<span>Scite.exe編輯器並將資料夾移至隨身系統下之data目錄下，將SciTEGlobal.properties檔案中的code.page = 0修改為code.page = 65001，如此一來就可以更方便的打開內涵中文字的程式了，最後利用SciTE建立stop.bat與start.bat如下:</span></p>
+<p>start.bat</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">@echo off
+set Disk=y
+path=%PATH%;
+
+taskkill /IM python.exe /F
+taskkill /IM pythonw.exe /F
+
+taskkill /IM scite.exe /F
+
+REM 終止虛擬硬碟與目錄的對應
+subst %Disk%: /D
+REM 關閉 cmd 指令視窗
+taskkill /IM cmd.exe /F
+
+EXIT</pre>
+<p>stop.bat</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">@echo off
+set Disk=y
+subst %Disk%: "data"
+
+%Disk%:
+
+set HomePath=%Disk%:\home
+set HomeDrive=%Disk%:\home
+set Home=%Disk%:\home
+set USERPROFILE=%Disk%:\home
+
+REM 將系統 Python 程式的 io 設為 utf-8
+set PYTHONIOENCODING="utf-8"
+
+set PYTHONPATH=%Disk%:\Python38\DLLs;%Disk%:\Python38\Lib;%Disk%:\Python38\Lib\site-packages;
+set PYTHONHOME=%Disk%:\Python38
+
+set path_python=%Disk%:\Python38;%Disk%:\Python38\Scripts;
+
+path=%Disk%:;%path_python%;
+
+start /MIN cmd.exe
+start /MIN cmd.exe
+start /MIN cmd.exe
+start /MIN cmd.exe
+
+start /MIN %Disk%:\wScite\SciTE.exe
+start /MIN %Disk%:\wScite\SciTE.exe
+
+Exit</pre>
+<p><span></span>(3)<span>利用get-pip.py在先前完成之隨身系統中安裝pip，利用pip指令python -m pip install flask lxml bs4 flask-cors Markdown pelican leo 安裝 flask lxml beautifulsoup4 flask-cors Markdown pelican 及 leo</span></p>
+<p><span>(4)下載msys2先安裝在Windows系統，從電腦C槽中複製msys64資料夾至隨身系統之data目錄下，並解除電腦系統中之msys2。</span></p>
+<p><span>(5)設置y：\ msys64 \ etc \ pacman.conf與wgetrc等兩個檔案：<br/><span><span>pacman.conf檔案部分：</span></span></span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># next two lines uncommented for wcm2020
+XferCommand = /usr/bin/curl -L -C - -f -o %o %u
+XferCommand = /usr/bin/wget --passive-ftp -c -O %o %u
+#CleanMethod = KeepInstalled
+Architecture = auto</pre>
+<p><span>wgetrc檔案部分：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># set for wcm2020
+https_proxy = http://[2001:288:6004:17::53]:3128/
+http_proxy = http://[2001:288:6004:17::53]:3128/
+ftp_proxy = http://[2001:288:6004:17::53]:3128/</pre>
+<p><span>修改完成後，重新啟動mingw64.exe，使用指令透過IPv6的proxy server進行</span><span>程序包更新：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -Syu</pre>
+<p><span>再安裝base-devel與gcc</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S base-devel
+$ pacman -S gcc</pre>
+<p>安裝完後須修改start.bat之內容如下:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">REM 設定 msys2 64 位元的執行路徑
+set path_msys2=%Disk%:\msys64\usr\bin;
+
+path=%Disk%:;%path_python%;%path_git%;%path_msys2%;</pre>
+<p><span>安裝make</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S make</pre>
+<p><span>處理完MSYS環境中的gcc之後，為了建立Windows 64位元環境下的gcc編譯環境，接下來要在先前尚未處理的MSYS環境下的版本中，安裝mingw-w64-x86_64-gcc與mingw-w64- x86_64-toolchain，下載初步尚未安裝任何gcc版本的可移植MSYS2系統，然後安裝gcc與toolchain：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">$ pacman -S mingw-w64-x86_64-gcc
+
+$ pacman -S mingw-w64-x86_64-toolchain</pre>
+<p><span>之後就可以修改start.bat啟動路徑為：</span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">REM 設定 msys2 64 位元的執行路徑
+set path_msys2=%Disk%:\msys64\mingw64\bin;
+
+path=%Disk%:;%path_python%;%path_git%;%path_msys2%;</pre>
+<p><span>後利用此一mingw-w64-x86_64-gcc編譯放置tmp的Scintilla與Scite，只要分別進入win32目錄，然後執行make指令：</span></p>
+<pre class="brush:xml;auto-links:false;toolbar:false" contenteditable="false">$ mingw32-make</pre>
+<p><span>完成後，測試編譯以下簡單的C程序：</span></p>
+<pre class="brush:cpp;auto-links:false;toolbar:false" contenteditable="false">// hello.c
+#include &lt;stdio.h&gt;
+
+int main() {
+    printf("Hello, world!\n");
+    return 0;
+}</pre>
+<p><span>將此檔案存在tmp \ c_ex目錄下，命名為hello.c</span><br/><span><span>然後利用：</span></span></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">gcc -o hello.exe hello.c</pre>
+<p>完成後將輸出一個hello.exe</p>
+<p>(6)安裝PortableGit於隨身系統。</p>
+<h2>W6</h2>
+<h4><b>因應疫情的影響，後續可能需要改由線上教學，須自行準備web cam，以下為使用安卓手機作為web cam的教學</b></h4>
+<p><a href="https://40823131.github.io/wcm2020g1/content/Android%E6%89%8B%E6%A9%9F%E9%8F%A1%E9%A0%AD%E4%BB%A3%E6%9B%BFwebcam%E6%95%99%E5%AD%B8.html">手機web cam教學</a></p>
+<h2>W7</h2>
+<h4>Youtube live+OBS串流、Google meet 線上教學 小組網站建立、使用SSH推送更新網頁。</h4>
+<h2>W8</h2>
+<h4>組長與老師開會，組員透過live streaming觀看討論過程。</h4>
+<h2>W10</h2>
+<h4>Python and Flask</h4>
+<h5>測試使用Python程式取出表單中學號以及對應成績</h5>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">import csv
+  
+# read student list
+filename = 'D:/1a/1alist.txt'
+with open(filename, encoding="utf-8") as f:
+    content = f.readlines()
+    student = [x.strip() for x in content]
+#print(content)
+#print(student)
+  
+# Timestamp, email, ????, url, score, desp, memo
+# 0, 1, 2, 3, 4, 5, 6
+#total = 0
+ 
+all = {}
+with open('D:/1a/1a.csv', encoding="utf-8") as csv_file:
+    csv_reader = csv.reader(csv_file, delimiter=',')
+      
+    line_count = 0
+    for row in csv_reader:
+        if line_count == 0:
+            #print(f'Column names are {", ".join(row)}')
+            line_count += 1
+        else:
+            student_num = row[1].split("@")[0]
+            #print(student_num)
+            student_score = row[4]
+            #print(student_score)
+            try:
+                all.update({student_num: student_score})
+            except:
+                all.update({student_num: "error"})
+            #print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
+            #print(f'\t{row[4]}')
+            #total += int(row[4])
+            line_count += 1
+#print(all)
+#print(student)
+ 
+for i in student:
+      
+    #if i in all:
+        #pass
+    #else:
+        #print(str(i))
+      
+    try:
+        print(i + "\t" + all[i])
+    except:
+        print(i + "\t60")
+ 
+  
+    #print(f'Processed {line_count} lines.')
+    #print("??=" + str(total/line_count))</pre>
+<h5><strong>基本Flask</strong></h5>
+<div class="line number1 index0 alt2"><code class="py keyword"></code></div>
+<div class="line number1 index0 alt2"><code class="py keyword"></code></div>
+<div class="line number1 index0 alt2">
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">from flask import Flask
+ 
+app = Flask(__name__)
+ 
+@app.route('/')
+def hello_world():
+    return 'Hello, From Flask!'
+ 
+if __name__== '__main__':
+    app.run()</pre>
+<p><strong>以此為基本再進行延伸。</strong></p>
+<h2>W11-W13</h2>
+<h4><b>建立虛擬主機</b></h4>
+<p><b>前面步驟為安裝設定重點為ipv4及ipv6網路設定都為自動</b><br/><b></b></p>
+<p><b>進入介面後，再輸入指令</b></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo vi 00-installer-config.yaml</pre>
+<p><strong>修改檔案與下圖相符</strong></p>
+<p><b><img alt="" height="679" src="/images/ub.png" width="815"/></b></p>
+<p><b></b> <strong>輸入指令</strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo netplan apply</pre>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">ping4 140.130.15.254</pre>
+<p><b>網路部分設定完成<br/><br/></b></p>
+<p><b>安裝pip3</b></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt install net-tools</pre>
+<p></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt update</pre>
+<p></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt install python3-pip</pre>
+<p><b>利用pip3安裝flask flask_cors bs4 lxml markdown</b></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo pip3 install flask flask_cors bs4 lxml markdown</pre>
+<p><strong>建立github資料夾</strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">mkdir github</pre>
+<p><strong>安裝桌面</strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt install xorg</pre>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt install fluxbox</pre>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">sudo apt install lxde</pre>
+<p>重開虛擬主機如下:<br/><br/></p>
+<p><img alt="" height="680" src="/images/vir.png" width="818"/></p>
+<p></p><h2>W14</h2>
+<h4>MBR與GPT磁碟分割之差異</h4>
+<p><strong>MBR:MBR為Master Boot Record Boot Record的縮寫，為1983年由IBM公司所提出的分割表格式。</strong></p>
+<p><strong>位於硬碟開始部份的一個特殊磁區，內含系統載入器及硬碟邏輯分割區資訊。啟動系統時會從磁區內使用代碼來啟動系統，若MBR之啟動資訊損壞，則系統無法正常啟動。</strong></p>
+<p><strong>MBR只能用於最大容量為2TB的硬碟，如果使用超過2TB之硬碟，多出來的部分將無法被辨識。MBR最多只支援將硬碟設定為四個主要磁碟分割。</strong></p>
+<p><strong>使用MBR啟動電腦時，將先啟動主機板之BIOS，隨後BIOS載入MBR，最後MBR啟動系統。</strong></p>
+<p><strong>GPT:GPT為GUID Partition Tableartition Table的縮寫，其更加符合現代需求，故成為逐漸取代MBR的新標準。GPT最凸顯的優勢在於它突破了MBR最大只支援2T硬碟的限制，同時使用者可以將硬碟劃分數量不限的分割槽，雖然Windows只允許GPT硬碟上最多有128個分區，但128個分區基本上已經能滿足所有人群的使用需求。</strong></p>
+<p><strong>另外，GPT並不會把引導資料都存儲在一個位置，從資訊安全的角度來看比MBR更加優秀。</strong></p>
+<h2>W15</h2>
+<h4><strong><span>利用Pypdf2切割pdf檔</span></strong></h4>
+<p><strong><span>切割PDF之.py程式檔</span></strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex1.py
+import os
+from PyPDF2 import PdfFileWriter, PdfFileReader
+   
+pdfReader = PdfFileReader(open("2002_Book_Real-WorldASPNETBuildingAConte.pdf", "rb"))
+information = [("WhatIsCMS",18,45)]
+   
+for page in range(len(information)):
+    pdf_writer = PdfFileWriter()
+    start = information[page][1]
+    end = information[page][2]
+    while start&lt;=end:
+        pdf_writer.addPage(pdfReader.getPage(start-1))
+        start+=1
+    if not os.path.exists("./"):
+        os.makedirs(savepath)
+    output_filename = '{}_{}_page_{}.pdf'.format(information[page][0],information[page][1], information[page][2])
+    with open(output_filename,'wb') as out:
+        pdf_writer.write(out)
+</pre>
+<br/><strong><span></span></strong></div>
+<div class="line number1 index0 alt2"><strong><span></span></strong></div>
+<h2>W16-W17</h2>
+<h4><strong><span>利用pypdf2擷取pdf與合併pdf的程式，並利用API放上動態網站測試。</span></strong></h4>
+<p><strong><span>利用pypdf2擷取出3個pdf檔</span></strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex2.py
+import os
+from PyPDF2 import PdfFileWriter, PdfFileReader
+ 
+pdfReader = PdfFileReader(open("2019_Book_PracticalFlutter.pdf", "rb"))
+information = [("GitAndGithub",16,26),("GitAndGithub",36,46),("GitAndGithub",196,289)]
+ 
+for page in range(len(information)):
+    pdf_writer = PdfFileWriter()
+    start = information[page][1]
+    end = information[page][2]
+    while start&lt;=end:
+        pdf_writer.addPage(pdfReader.getPage(start-1))
+        start+=1
+    if not os.path.exists("./"):
+        os.makedirs(savepath)
+    output_filename = '{}_{}_page_{}.pdf'.format(information[page][0],information[page][1], information[page][2])
+    with open(output_filename,'wb') as out:
+        pdf_writer.write(out)</pre>
+<p><strong>再使用以下程式合併成一個pdf檔</strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex3.py
+# merge several pdf files
+import sys
+import PyPDF2
+
+pdf_write_object = PyPDF2.PdfFileWriter()
+
+#for i in sys.argv[1:]:
+for i in ["GitAndGithub_16_page_26.pdf","GitAndGithub_36_page_46.pdf","GitAndGithub_196_page_289.pdf"]:
+pdf_read_object = PyPDF2.PdfFileReader(i)
+print('processing file : '+ i + 'number of pages : ' + str(pdf_read_object.numPages))
+for page in range(pdf_read_object.numPages):
+pdf_write_object.addPage(pdf_read_object.getPage(page))
+
+final_file_object = open('2020CMS.pdf', 'wb')
+pdf_write_object.write(final_file_object)
+final_file_object.close()
+
+</pre>
+<p><strong></strong></p>
+<p><strong><span>Google API</span></strong></p>
+<p><img alt="" height="74" src="/images/下載.png" width="935"/></p>
+<h1>操作內容教學</h1>
+<h2>產生SSH KEY</h2>
+<p>利用隨身系統輸入指令sh，如下圖</p>
+<p><img alt="" height="444" src="/images/sh.png" width="676"/></p>
+<p>輸入指令ssh-keygen -t rsa -b 4096 -C "學號"</p>
+<p>預設之金鑰儲存在y:\home\.ssh目錄裡</p>
+<p><img alt="" height="450" src="/images/sshkey.png" width="679"/></p>
+<p>使用puttygen將private key(id_rsa)導入，並轉換為putty能夠讀懂的格式(.ppk)檔案</p>
+<p>存好(.ppk)檔後</p>
+<p><img alt="" height="477" src="/images/private key.png" width="492"/></p>
+<p>使用scite將public key (id_rsa.pub)打開，到工具列找到Options--&gt;Wrap就能看建完整的檔案內容</p>
+<p><img alt="" height="743" src="/images/pub key setting.png" width="581"/></p>
+<p>按下後將顯示完整內容如下:</p>
+<p><img alt="" height="746" src="/images/all pub key.png" width="579"/></p>
+<p>將完整public key內容複製，進入github右上角下拉選單點擊settings</p>
+<p><img alt="" height="456" src="/images/github setting.png" width="196"/></p>
+<p>點擊SSH and GPG keys</p>
+<p><img alt="" height="630" src="/images/github setting1.png" width="262"/></p>
+<p>點擊New SSH key，將複製的內容貼上並儲存就可以使用了</p>
+<p><img alt="" height="92" src="/images/github setting2.png" width="754"/></p>
+<h2>SSH Putty設定</h2>
+<p><img alt="" height="452" src="/images/putty ssh.png" width="470"/></p>
+<p>畫線處請選擇前面步驟所生成之.ppk檔案</p>
+<p><img alt="" height="456" src="/images/putty ssh1.png" width="468"/></p>
+<p>記得回到Session中按下save存檔，如果這台電腦只有自己使用的話，儲存後沒有特殊情況是不需要重新設定此步驟的:</p>
+<p><img alt="" height="453" src="/images/putty ssh2.png" width="466"/></p>
+<p>接下來有最後一個步驟需要進入你要push的資料夾，此處以wcm2020為例:</p>
+<p>進入Y:\tmp\wcm2020\.git內修改config檔案</p>
+<p>從</p>
+<p><img alt="" height="742" src="/images/putty ssh4.png" width="580"/></p>
+<p>修改為</p>
+<p><img alt="" height="742" src="/images/putty ssh5.png" width="579"/></p>
+<p></p>
+<p></p>
 <p></p>

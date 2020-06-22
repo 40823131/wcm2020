@@ -154,8 +154,26 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content"> <a href='W1-W5.html'>Next</a> >> W1-W5<br /><h1>每週進度</h1>
-<br /> <a href='W1-W5.html'>Next</a> >> W1-W5</div>
+    <div id="tipue_search_content">操作內容教學 << <a href='操作內容教學.html'>Previous</a> <a href='SSH Putty設定.html'>Next</a> >> SSH Putty設定<br /><h1>產生SSH KEY</h1>
+<p>利用隨身系統輸入指令sh，如下圖</p>
+<p><img alt="" height="444" src="./../images/sh.png" width="676"/></p>
+<p>輸入指令ssh-keygen -t rsa -b 4096 -C "學號"</p>
+<p>預設之金鑰儲存在y:\home\.ssh目錄裡</p>
+<p><img alt="" height="450" src="./../images/sshkey.png" width="679"/></p>
+<p>使用puttygen將private key(id_rsa)導入，並轉換為putty能夠讀懂的格式(.ppk)檔案</p>
+<p>存好(.ppk)檔後</p>
+<p><img alt="" height="477" src="./../images/private key.png" width="492"/></p>
+<p>使用scite將public key (id_rsa.pub)打開，到工具列找到Options--&gt;Wrap就能看建完整的檔案內容</p>
+<p><img alt="" height="743" src="./../images/pub key setting.png" width="581"/></p>
+<p>按下後將顯示完整內容如下:</p>
+<p><img alt="" height="746" src="./../images/all pub key.png" width="579"/></p>
+<p>將完整public key內容複製，進入github右上角下拉選單點擊settings</p>
+<p><img alt="" height="456" src="./../images/github setting.png" width="196"/></p>
+<p>點擊SSH and GPG keys</p>
+<p><img alt="" height="630" src="./../images/github setting1.png" width="262"/></p>
+<p>點擊New SSH key，將複製的內容貼上並儲存就可以使用了</p>
+<p><img alt="" height="92" src="./../images/github setting2.png" width="754"/></p>
+<br />操作內容教學 << <a href='操作內容教學.html'>Previous</a> <a href='SSH Putty設定.html'>Next</a> >> SSH Putty設定</div>
         
     <!-- footer -->
       <div class="container">

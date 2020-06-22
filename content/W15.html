@@ -143,7 +143,7 @@ img.add_border {
                             <li><a href="./../blog/index.html">blog</a></li>
                         </ul>
                       </li>
-                     <li><a href='About.html'>About</a><li><a href='Develop.html'>Develop</a></li>
+                     <li class='has-children'><a href='每週進度.html'>每週進度</a><ul class='dropdown'><li><a href='W1-W5.html'>W1-W5</a><li><a href='W6.html'>W6</a><li><a href='W7.html'>W7</a><li><a href='W8.html'>W8</a><li><a href='W10.html'>W10</a><li><a href='W11-W13.html'>W11-W13</a><li><a href='W14.html'>W14</a><li><a href='W15.html'>W15</a><li><a href='W16-W17.html'>W16-W17</a></li></ul><li class='has-children'><a href='操作內容教學.html'>操作內容教學</a><ul class='dropdown'><li><a href='產生SSH KEY.html'>產生SSH KEY</a><li><a href='SSH Putty設定.html'>SSH Putty設定</a></li>
                       </ul>
                 </nav>
               </div>
@@ -154,18 +154,32 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content"> <a href='Develop.html'>Next</a> >> Develop<br /><h1>About</h1>
-<p>此內容管理系統以 <a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> 作為 submodule 運作, 可以選定對應的版本運作, cmsimde 可以持續改版, 不會影響之前設為 submodule, 使用舊版 cmsimde 模組的內容管理相關運作.</p>
-<h4>利用 cmsimde 建立靜態網誌方法:</h4>
-<p>1. 在 github 建立倉儲, git clone 到近端</p>
-<p>2. 參考 <a href="https://github.com/mdecourse/newcms">https://github.com/mdecourse/newcms</a>, 加入除了 cmsimde 目錄外的所有內容</p>
-<p>以 git submodule add <a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> cmsimde</p>
-<p>建立 cmsimde 目錄, 並從 github 取下子模組內容.</p>
-<p>3.在近端維護時, 更換目錄到倉儲中的 cmsimde, 以 python wsgi.py 啟動近端網際伺服器.</p>
-<p>動態內容編輯完成後, 以 generate_pages 轉為靜態內容, 以 git add commit 及 push 將內容推到遠端.</p>
-<p>4. 之後若要以 git clone 取下包含 submodule 的所有內容, 執行:</p>
-<p>git clone --recurse-submodules <a href="https://github.com/mdecourse/newcms.git">https://github.com/mdecourse/newcms.git</a></p>
-<br /> <a href='Develop.html'>Next</a> >> Develop</div>
+    <div id="tipue_search_content">W14 << <a href='W14.html'>Previous</a> <a href='W16-W17.html'>Next</a> >> W16-W17<br /><h1>W15</h1>
+<h4><strong><span>利用Pypdf2切割pdf檔</span></strong></h4>
+<p><strong><span>切割PDF之.py程式檔</span></strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex1.py
+import os
+from PyPDF2 import PdfFileWriter, PdfFileReader
+   
+pdfReader = PdfFileReader(open("2002_Book_Real-WorldASPNETBuildingAConte.pdf", "rb"))
+information = [("WhatIsCMS",18,45)]
+   
+for page in range(len(information)):
+    pdf_writer = PdfFileWriter()
+    start = information[page][1]
+    end = information[page][2]
+    while start&lt;=end:
+        pdf_writer.addPage(pdfReader.getPage(start-1))
+        start+=1
+    if not os.path.exists("./"):
+        os.makedirs(savepath)
+    output_filename = '{}_{}_page_{}.pdf'.format(information[page][0],information[page][1], information[page][2])
+    with open(output_filename,'wb') as out:
+        pdf_writer.write(out)
+</pre>
+<br/><strong><span></span></strong></div>
+<div class="line number1 index0 alt2"><strong><span></span></strong></div>
+<br />W14 << <a href='W14.html'>Previous</a> <a href='W16-W17.html'>Next</a> >> W16-W17</div>
         
     <!-- footer -->
       <div class="container">

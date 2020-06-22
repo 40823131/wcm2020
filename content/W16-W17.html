@@ -143,7 +143,7 @@ img.add_border {
                             <li><a href="./../blog/index.html">blog</a></li>
                         </ul>
                       </li>
-                     <li><a href='About.html'>About</a><li><a href='Develop.html'>Develop</a></li>
+                     <li class='has-children'><a href='每週進度.html'>每週進度</a><ul class='dropdown'><li><a href='W1-W5.html'>W1-W5</a><li><a href='W6.html'>W6</a><li><a href='W7.html'>W7</a><li><a href='W8.html'>W8</a><li><a href='W10.html'>W10</a><li><a href='W11-W13.html'>W11-W13</a><li><a href='W14.html'>W14</a><li><a href='W15.html'>W15</a><li><a href='W16-W17.html'>W16-W17</a></li></ul><li class='has-children'><a href='操作內容教學.html'>操作內容教學</a><ul class='dropdown'><li><a href='產生SSH KEY.html'>產生SSH KEY</a><li><a href='SSH Putty設定.html'>SSH Putty設定</a></li>
                       </ul>
                 </nav>
               </div>
@@ -154,12 +154,52 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">About << <a href='About.html'>Previous</a> <br /><h1>Develop</h1>
-<p><a href="https://github.com/mdecourse/cmsimde">https://github.com/mdecourse/cmsimde</a> 的開發, 可以在一個目錄中放入 cmsimde, 然後將 up_dir 中的內容放到與 cmsimde 目錄同位階的地方, 使用 command 進入 cmsimde 目錄, 執行 python wsgi.py, 就可以啟動, 以瀏覽器 https://localhost:9443 就可以連接, 以 admin 作為管理者密碼, 就可以登入維護內容.</p>
-<p>cmsimde 的開發採用 Leo Editor, 開啟 cmsimde 目錄中的 cmsimde.leo 就可以進行程式修改, 結束後, 若要保留網際內容, 只要將 cmsimde 外部的內容倒回 up_dir 目錄中即可後續對 cmsimde 遠端倉儲進行改版.</p>
-<p>init.py 位於  up_dir 目錄, 可以設定 site_title 與 uwsgi 等變數.</p>
-<p>ssh 測試</p>
-<p></p><br />About << <a href='About.html'>Previous</a> </div>
+    <div id="tipue_search_content">W15 << <a href='W15.html'>Previous</a> <a href='操作內容教學.html'>Next</a> >> 操作內容教學<br /><h1>W16-W17</h1>
+<h4><strong><span>利用pypdf2擷取pdf與合併pdf的程式，並利用API放上動態網站測試。</span></strong></h4>
+<p><strong><span>利用pypdf2擷取出3個pdf檔</span></strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex2.py
+import os
+from PyPDF2 import PdfFileWriter, PdfFileReader
+ 
+pdfReader = PdfFileReader(open("2019_Book_PracticalFlutter.pdf", "rb"))
+information = [("GitAndGithub",16,26),("GitAndGithub",36,46),("GitAndGithub",196,289)]
+ 
+for page in range(len(information)):
+    pdf_writer = PdfFileWriter()
+    start = information[page][1]
+    end = information[page][2]
+    while start&lt;=end:
+        pdf_writer.addPage(pdfReader.getPage(start-1))
+        start+=1
+    if not os.path.exists("./"):
+        os.makedirs(savepath)
+    output_filename = '{}_{}_page_{}.pdf'.format(information[page][0],information[page][1], information[page][2])
+    with open(output_filename,'wb') as out:
+        pdf_writer.write(out)</pre>
+<p><strong>再使用以下程式合併成一個pdf檔</strong></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"># pypdf2_ex3.py
+# merge several pdf files
+import sys
+import PyPDF2
+
+pdf_write_object = PyPDF2.PdfFileWriter()
+
+#for i in sys.argv[1:]:
+for i in ["GitAndGithub_16_page_26.pdf","GitAndGithub_36_page_46.pdf","GitAndGithub_196_page_289.pdf"]:
+pdf_read_object = PyPDF2.PdfFileReader(i)
+print('processing file : '+ i + 'number of pages : ' + str(pdf_read_object.numPages))
+for page in range(pdf_read_object.numPages):
+pdf_write_object.addPage(pdf_read_object.getPage(page))
+
+final_file_object = open('2020CMS.pdf', 'wb')
+pdf_write_object.write(final_file_object)
+final_file_object.close()
+
+</pre>
+<p><strong></strong></p>
+<p><strong><span>Google API</span></strong></p>
+<p><img alt="" height="74" src="./../images/下載.png" width="935"/></p>
+<br />W15 << <a href='W15.html'>Previous</a> <a href='操作內容教學.html'>Next</a> >> 操作內容教學</div>
         
     <!-- footer -->
       <div class="container">
