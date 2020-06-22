@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>40823131 wcm2020</title><link href="https://40823131.github.io/wcm2020/blog/" rel="alternate"></link><link href="https://40823131.github.io/wcm2020/blog/feeds/all.atom.xml" rel="self"></link><id>https://40823131.github.io/wcm2020/blog/</id><updated>2020-06-22T17:52:00+08:00</updated><entry><title>wcm2020 課程</title><link href="https://40823131.github.io/wcm2020/blog/2020-32-bit-Windows.html" rel="alternate"></link><published>2020-06-22T17:52:00+08:00</published><updated>2020-06-22T17:52:00+08:00</updated><author><name>40823131</name></author><id>tag:40823131.github.io,2020-06-22:/wcm2020/blog/2020-32-bit-Windows.html</id><summary type="html">&lt;p&gt;virtual box
+</summary><content type="html">&lt;p&gt;virtual box
+&lt;/p&gt;
+&lt;p&gt;建立虛擬主機&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;前面步驟為安裝設定重點為ipv4及ipv6網路設定都為自動&lt;/p&gt;
+&lt;p&gt;進入介面後，再輸入指令&lt;/p&gt;
+&lt;p&gt;sudo vi 00-installer-config.yaml&lt;/p&gt;
+&lt;p&gt;修改檔案與下圖相符
+&lt;img src="https://40823131.github.io/wcm2020/images/ub.png" width="400" height="350" alt="ub" align=center&gt;
+輸入指令&lt;/p&gt;
+&lt;p&gt;sudo netplan apply&lt;/p&gt;
+&lt;p&gt;ping4 140.130.15.254&lt;/p&gt;
+&lt;p&gt;網路部分設定完成&lt;/p&gt;
+&lt;p&gt;安裝pip3&lt;/p&gt;
+&lt;p&gt;sudo apt install net-tools&lt;/p&gt;
+&lt;p&gt;sudo apt update&lt;/p&gt;
+&lt;p&gt;sudo apt install python3-pip&lt;/p&gt;
+&lt;p&gt;利用pip3安裝flask flask_cors bs4 lxml markdown&lt;/p&gt;
+&lt;p&gt;sudo pip3 install flask flask_cors bs4 lxml markdown&lt;/p&gt;
+&lt;p&gt;建立github資料夾&lt;/p&gt;
+&lt;p&gt;mkdir github
+安裝桌面&lt;/p&gt;
+&lt;p&gt;sudo apt install xorg&lt;/p&gt;
+&lt;p&gt;sudo apt install fluxbox&lt;/p&gt;
+&lt;p&gt;sudo apt install lxde&lt;/p&gt;
+&lt;p&gt;重開虛擬主機如下:&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://40823131.github.io/wcm2020/images/vir.png" width="400" height="350" alt="ub" align=center&gt;&lt;/p&gt;
+&lt;hr&gt;</content><category term="Misc"></category><category term="wcm2020"></category></entry></feed>
